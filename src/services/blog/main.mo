@@ -56,7 +56,8 @@ shared({ caller = initializer}) actor class Service() {
         if (not isCallerOwner(msg.caller)) {
             return false;
         };
-        let _ = blogController.createPost(newPost);
+        let cbMsg = blogController.createPost(newPost);
+        let _ = blogController.notifySubscribers(cbMsg);
         return true;
     };
 

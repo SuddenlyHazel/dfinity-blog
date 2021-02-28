@@ -65,7 +65,12 @@ module {
                 };
             };
             blogsDb.put(blog, meta);
-            true;
+            true
+        };
+
+        public func blogPostUpdateCallback(msg : Types.BlogPostPubMessage) {
+            Debug.print("Got update with title " # msg.title);
+            // Do something with the post update here..
         };
     };
 

@@ -59,6 +59,13 @@ module {
         summary: Text;
     };
 
+    // Keeping this really slim. We could even remove the title field
+    public type BlogPostPubMessage = {
+        id: Nat;
+        title: Text;
+        time: Int;
+    };
+
     // Pages Types
     public type Page = {
         content: Text;

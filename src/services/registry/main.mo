@@ -1,11 +1,12 @@
+import BlogRegistry "BlogRegistry";
 import Char "mo:base/Char";
 import ExperimentalCycles "mo:base/ExperimentalCycles";
 import HashMap "mo:base/HashMap";
 import Option "mo:base/Option";
 import Principal "mo:base/Principal";
+import PublicTypes "../public_types";
 import Random "mo:base/Random";
 import Result "mo:base/Result";
-import BlogRegistry "BlogRegistry";
 import Text "mo:base/Text";
 import Time "mo:base/Time";
 import Types "../types";
@@ -22,7 +23,7 @@ shared({ caller = initializer}) actor class Registery() {
       return registry.listBlogs();
    };
 
-   public shared(msg) func registerBlog() : async Result.Result<(), Text> {
+   public shared(msg) func registerBlog() : async Result.Result<?PublicTypes.BlogPostPubMessageCallback, Text> {
 
       /*
       Canister could require cycles inorder to register itself! Woah!
@@ -36,6 +37,10 @@ shared({ caller = initializer}) actor class Registery() {
       let _ = ExperimentalCycles.accept(1000);
       */
       let _ = await registry.registerBlog(msg.caller);
-      #ok()
-   }
+      #ok(?blogPostUpdateCallback)
+   };
+
+   public shared func blogPostUpdateCallback(msg : Types.BlogPostPubMessage) : async () {
+      registry.blogPostUpdateCallback(msg);
+   };
 };
