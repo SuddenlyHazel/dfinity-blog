@@ -1,4 +1,22 @@
+import TrieSet "mo:base/TrieSet";
 module {
+    // Member Types
+
+    public type DelegatedCall = {
+        member : Principal;
+        action : MemberAction;
+    };
+
+    // For example {name : "comment", trustLevel : 1000}
+    public type MemberAction = {
+        name : Text;
+        trustLevel : Nat16;
+    };
+
+    public type MemberState = {
+        trust : Nat16
+    };
+
     // Settings Types
     public type MenuLink = {
         id : Nat;
