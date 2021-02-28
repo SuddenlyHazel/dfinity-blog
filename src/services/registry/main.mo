@@ -13,7 +13,7 @@ import Types "../types";
 // Simple Canister exposing an interface to allow blog canisters to register 
 shared({ caller = initializer}) actor class Registery() {
    let registry = BlogRegistry.BlogRegistry();
-
+   
    public type BlogListing = {
       name : Text;
    };

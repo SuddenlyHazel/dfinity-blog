@@ -7,6 +7,10 @@ module {
         action : MemberAction;
     };
 
+    public type Call = {
+        payload : shared (Any) -> async Any;
+    };
+
     // For example {name : "comment", trustLevel : 1000}
     public type MemberAction = {
         name : Text;

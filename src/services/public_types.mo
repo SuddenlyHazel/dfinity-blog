@@ -12,7 +12,7 @@ module {
 
     public type MembershipCanister = actor {
         canUserExecuteAction : shared (caller : Principal, action : Types.MemberAction) -> async Bool;
-        registerMember : shared -> async Bool;
-        getMemberActions : shared -> async [Types.MemberAction];
+        registerMember : shared () -> async Bool;
+        getMemberActions : shared () -> async [Types.MemberAction];
     };
 };

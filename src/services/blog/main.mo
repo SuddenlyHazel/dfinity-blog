@@ -10,9 +10,10 @@ import Types "../types";
 import PublicTypes "../public_types";
 
 shared({ caller = initializer}) actor class Service() {
-    var owner : Principal = Principal.fromText("ww6r2-rinbd-x7gir-slwrk-32wck-feluo-or73f-4z4hx-mjbpb-d7fkh-4ae");
-    let blogController : BlogController.BlogController = BlogController.BlogController();
+    var owner : Principal = Principal.fromText("tlnld-p2tcv-5w2qf-zb6zd-tbx4z-mke63-upybz-rjrbc-dw3vm-jv6ua-5ae");
 
+    let blogController : BlogController.BlogController = BlogController.BlogController();
+    var memberController : ?PublicTypes.MembershipCanister = null;
     func isCallerOwner(caller : Principal) : Bool {
         return owner == caller or initializer == caller;
     };
@@ -24,6 +25,19 @@ shared({ caller = initializer}) actor class Service() {
             return false;
         };
         await blogController.registerBlog(registry)
+    };
+
+    // Allows owner to delegate access to a Membership Canister
+    public shared(msg) func installMembershipCanister(canister : Principal) : async Bool {
+        if (not isCallerOwner(msg.caller)) {
+            return false;
+        };
+        memberController := ?actor(Principal.toText(canister));
+        true
+    };
+
+    public func getMembershipCanister() : async ?PublicTypes.MembershipCanister {
+        memberController;
     };
 
     public query(msg) func whoAmI() : async Principal {
