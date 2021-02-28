@@ -1,0 +1,6 @@
+
+module {
+    public class MemberController() {
+        
+    }
+}

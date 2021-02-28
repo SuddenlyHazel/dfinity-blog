@@ -1,19 +1,29 @@
-import Principal "mo:base/Principal";
-import HashMap "mo:base/HashMap";
-import Time "mo:base/Time";
 import Char "mo:base/Char";
-import Text "mo:base/Text";
+import BlogController "BlogController";
+import HashMap "mo:base/HashMap";
 import Option "mo:base/Option";
-import Db "db";
-import Types "types";
+import Principal "mo:base/Principal";
+import Result "mo:base/Result";
+import Text "mo:base/Text";
+import Time "mo:base/Time";
+import Types "../types";
+import PublicTypes "../public_types";
 
 shared({ caller = initializer}) actor class Service() {
     var owner : Principal = Principal.fromText("ww6r2-rinbd-x7gir-slwrk-32wck-feluo-or73f-4z4hx-mjbpb-d7fkh-4ae");
-
-    let db : Db.Db = Db.Db();
+    let blogController : BlogController.BlogController = BlogController.BlogController();
 
     func isCallerOwner(caller : Principal) : Bool {
         return owner == caller or initializer == caller;
+    };
+
+    // Allows owner to register blog with a registry canister
+    // Registery canisters recieve pub updates from blog posts
+    public shared(msg) func registerBlog(registry : Principal) : async Bool {
+        if (not isCallerOwner(msg.caller)) {
+            return false;
+        };
+        await blogController.registerBlog(registry)
     };
 
     public query(msg) func whoAmI() : async Principal {
@@ -24,31 +34,30 @@ shared({ caller = initializer}) actor class Service() {
         msg.caller == initializer or msg.caller == owner;
     };
 
-    public query func getBlogMeta() : async Types.BlogMeta {
-        return db.getMeta();
+    public query func getBlogMetadata() : async Types.BlogMeta {
+        return blogController.getMeta();
     };
 
     public shared(msg) func createPost(newPost : Types.BlogPostEgg) : async Bool {
         if (not isCallerOwner(msg.caller)) {
             return false;
         };
-        let _ = db.createPost(newPost);
+        let _ = blogController.createPost(newPost);
         return true;
     };
 
     public query func getPost(id : Nat) : async ?Types.BlogPost {
-        db.getPost(id);
+        blogController.getPost(id);
     };
 
     public query func listPosts() : async [Types.BlogPostSummary] {
-        db.listPosts();
+        blogController.listPosts();
     };
 
     public shared(msg) func setOwner(new : Principal) {
         if (not isCallerOwner(msg.caller)) {
             return;
         };
-
         owner := new;
     };
 };

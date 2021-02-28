@@ -1,0 +1,4 @@
+
+shared actor class MembershipCanister() {
+    
+}
