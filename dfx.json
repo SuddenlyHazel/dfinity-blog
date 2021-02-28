@@ -1,7 +1,15 @@
 {
   "canisters": {
     "backend": {
-      "main": "src/service/main.mo",
+      "main": "src/services/blog/main.mo",
+      "type": "motoko"
+    },
+    "registry": {
+      "main": "src/services/registry/main.mo",
+      "type": "motoko"
+    },
+    "members": {
+      "main": "src/services/members/main.mo",
       "type": "motoko"
     },
     "frontend": {
